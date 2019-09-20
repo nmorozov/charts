@@ -2,6 +2,9 @@
 
 Small web application for draw line charts based on randomly generated X and Y coordinates.
 
+## Live demo
+Play with the charts here [https://nmorozov.github.io/charts/](https://nmorozov.github.io/charts/).
+
 ## Quick start
 Clone the repository with git clone
 ```sh
