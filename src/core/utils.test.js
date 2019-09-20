@@ -13,5 +13,7 @@ it('generates correct chart data', () => {
 });
 
 it('generates correct unique coordinates', () => {
-  expect(genetateUniqueCoordinates(10, 0, 1000).length).toBe(10);
+  const uniqueCoordinates = genetateUniqueCoordinates(10, 0, 1000);
+  expect(uniqueCoordinates.length).toBe(10);
+  expect(new Set(uniqueCoordinates).size === uniqueCoordinates.length).toBe(true);
 });

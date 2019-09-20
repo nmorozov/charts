@@ -25,10 +25,10 @@ export function genetateUniqueCoordinates(length, ...args) {
   return Array.from(set);
 }
 
-export function generateChartDataInRange(xAxisMax, yAxisMax, count = 5) {
+export function generateChartDataInRange(xAxisMax, yAxisMax, count = 7) {
   const color = generateRandomHexColor();
   const chartData = { color, coordinates: [] };
-  const uniqueXCoordinates = genetateUniqueCoordinates(count, 0, xAxisMax);
+  const uniqueXCoordinates = genetateUniqueCoordinates(count, 0, xAxisMax).sort((a, b) => a - b);
   const uniqueYCoordinates = genetateUniqueCoordinates(count, 0, yAxisMax);
   for (let i = 0; i < count; i += 1) {
     chartData.coordinates.push({ xCoordinate: uniqueXCoordinates[i], yCoordinate: uniqueYCoordinates[i] });
