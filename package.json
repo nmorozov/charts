@@ -1,7 +1,8 @@
 {
-  "name": "rogii",
+  "name": "charts",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://nmorozov.github.io/charts/",
   "dependencies": {
     "canvas": "^2.6.0",
     "lodash": "^4.17.15",
