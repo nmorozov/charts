@@ -25,7 +25,7 @@ class App extends React.Component {
     const { addNewChart } = this.props;
     const chartData = generateChartDataInRange(
       document.documentElement.clientWidth,
-      document.documentElement.clientHeight / 2,
+      document.documentElement.clientHeight / 2 - 35,
     );
 
     addNewChart(chartData);
@@ -35,7 +35,9 @@ class App extends React.Component {
     const { chartsData } = this.props;
     return (
       <div>
-        <AddNewChartButton handleAddNewChartButtonClick={() => this.handleAddNewChartButtonClick()} />
+        <div className="panel">
+          <AddNewChartButton handleAddNewChartButtonClick={() => this.handleAddNewChartButtonClick()} />
+        </div>
         <Canvas
           fromCanvasIndex={0}
           handleMoveChartToAnotherCanvas={this.handleMoveChartToAnotherCanvas}

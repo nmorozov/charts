@@ -31,7 +31,7 @@ class Canvas extends React.Component {
 
   initDimensions() {
     this.canvas.width = document.documentElement.clientWidth;
-    this.canvas.height = document.documentElement.clientHeight / 2;
+    this.canvas.height = document.documentElement.clientHeight / 2 - 35;
   }
 
   initEventListeners() {
