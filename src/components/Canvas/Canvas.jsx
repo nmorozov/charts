@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import { arrayOf, array, oneOfType, number, func } from 'prop-types';
 import chartDataType from '../../types/chartDataType';
@@ -15,6 +16,8 @@ class Canvas extends React.Component {
   currentChart = null;
 
   chartsData = [];
+
+  chartWasMoved = false;
 
   drawer;
 
@@ -54,7 +57,14 @@ class Canvas extends React.Component {
     });
 
     this.canvas.addEventListener('mouseup', () => {
+      const { handleMoveChart, fromCanvasIndex } = this.props;
+
+      if (this.chartWasMoved) {
+        handleMoveChart(this.chartsData[this.currentChart], fromCanvasIndex, this.currentChart);
+      }
+
       this.dragMode = false;
+      this.chartWasMoved = false;
       this.currentChart = null;
     });
 
@@ -64,6 +74,7 @@ class Canvas extends React.Component {
           this.chartsData[this.currentChart].coordinates[i].xCoordinate += e.movementX;
           this.chartsData[this.currentChart].coordinates[i].yCoordinate += e.movementY;
         }
+        this.chartWasMoved = true;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawer.drawCharts(this.chartsData);
       }
@@ -84,12 +95,7 @@ class Canvas extends React.Component {
           toCanvasIndex = fromCanvasIndex - 1;
         }
 
-        handleMoveChartToAnotherCanvas(
-          this.chartsData[this.currentChart],
-          fromCanvasIndex,
-          toCanvasIndex,
-          this.currentChart,
-        );
+        handleMoveChartToAnotherCanvas(fromCanvasIndex, toCanvasIndex, this.currentChart);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.drawer.drawCharts(this.chartsData);
       }
@@ -98,7 +104,7 @@ class Canvas extends React.Component {
 
   render() {
     const { chartsData } = this.props;
-    this.chartsData = [...chartsData];
+    this.chartsData = _.cloneDeep(chartsData);
 
     if (this.drawer) {
       this.drawer.drawCharts(this.chartsData);
@@ -116,6 +122,7 @@ class Canvas extends React.Component {
 
 Canvas.propTypes = {
   handleMoveChartToAnotherCanvas: func.isRequired,
+  handleMoveChart: func.isRequired,
   fromCanvasIndex: number.isRequired,
   chartsData: oneOfType([arrayOf(chartDataType), array]),
 };

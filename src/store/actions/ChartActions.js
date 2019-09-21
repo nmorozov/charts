@@ -1,4 +1,4 @@
-import { ADD_NEW_CHART, MOVE_CHART_TO_ANOTHER_CANVAS } from '../constants/chart';
+import { ADD_NEW_CHART, MOVE_CHART_TO_ANOTHER_CANVAS, MOVE_CHART } from '../constants/chart';
 
 export function addNewChart(chartData) {
   return {
@@ -7,9 +7,16 @@ export function addNewChart(chartData) {
   };
 }
 
-export function moveChartToAnotherCanvas(chartData, fromCanvasIndex, toCanvasIndex, chartIndex) {
+export function moveChartToAnotherCanvas(fromCanvasIndex, toCanvasIndex, chartIndex) {
   return {
     type: MOVE_CHART_TO_ANOTHER_CANVAS,
-    payload: { chartData, fromCanvasIndex, toCanvasIndex, chartIndex },
+    payload: { fromCanvasIndex, toCanvasIndex, chartIndex },
+  };
+}
+
+export function moveChart(chartData, canvasIndex, chartIndex) {
+  return {
+    type: MOVE_CHART,
+    payload: { chartData, canvasIndex, chartIndex },
   };
 }
