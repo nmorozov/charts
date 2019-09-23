@@ -32,3 +32,7 @@ To drag a chart do the following steps: <br>
 3. Move mouse over selected canvas
 
 If you want to drag chart to another canvas, then move mouse to bottom (if another canvas is under) or to top (if another canvas is above) of the current canvas.
+
+## Perfomance
+
+![perfomance](https://i.imgur.com/7R45P4y.jpg)
