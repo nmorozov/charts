@@ -6,11 +6,12 @@ import { bindActionCreators } from 'redux';
 import { arrayOf, array, oneOfType, func } from 'prop-types';
 import chartDataType from '../../types/chartDataType';
 
-import { addNewChart, moveChartToAnotherCanvas, moveChart } from '../../store/actions/ChartActions';
+import { addNewChart, moveChartToAnotherCanvas, moveChart, removeCharts } from '../../store/actions/ChartActions';
 
 import { generateChartDataInRange } from '../../core/utils';
 
-import AddNewChartButton from '../../components/AddNewChartButton';
+import Panel from '../../components/Panel';
+import Button from '../../components/Button';
 import Canvas from '../../components/Canvas';
 
 import './App.scss';
@@ -38,12 +39,13 @@ class App extends React.Component {
   }
 
   render() {
-    const { chartsData } = this.props;
+    const { chartsData, removeCharts } = this.props;
     return (
       <div>
-        <div className="panel">
-          <AddNewChartButton handleAddNewChartButtonClick={() => this.handleAddNewChartButtonClick()} />
-        </div>
+        <Panel>
+          <Button handleButtonClick={() => this.handleAddNewChartButtonClick()} text="Add new chart" />
+          <Button handleButtonClick={removeCharts} text="Remove charts" />
+        </Panel>
         <Canvas
           fromCanvasIndex={0}
           handleMoveChartToAnotherCanvas={this.handleMoveChartToAnotherCanvas}
@@ -68,13 +70,14 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addNewChart, moveChartToAnotherCanvas, moveChart }, dispatch);
+  return bindActionCreators({ addNewChart, moveChartToAnotherCanvas, moveChart, removeCharts }, dispatch);
 }
 
 App.propTypes = {
   moveChartToAnotherCanvas: func.isRequired,
   addNewChart: func.isRequired,
   moveChart: func.isRequired,
+  removeCharts: func.isRequired,
   chartsData: oneOfType([arrayOf(chartDataType), array]),
 };
 

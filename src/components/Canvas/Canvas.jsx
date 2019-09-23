@@ -75,7 +75,7 @@ class Canvas extends React.Component {
           this.chartsData[this.currentChart].coordinates[i].yCoordinate += e.movementY;
         }
         this.chartWasMoved = true;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.clearCanvas();
         this.drawer.drawCharts(this.chartsData);
       }
     });
@@ -96,10 +96,14 @@ class Canvas extends React.Component {
         }
 
         handleMoveChartToAnotherCanvas(fromCanvasIndex, toCanvasIndex, this.currentChart);
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.clearCanvas();
         this.drawer.drawCharts(this.chartsData);
       }
     });
+  }
+
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   render() {
@@ -107,7 +111,11 @@ class Canvas extends React.Component {
     this.chartsData = _.cloneDeep(chartsData);
 
     if (this.drawer) {
-      this.drawer.drawCharts(this.chartsData);
+      if (this.chartsData.length > 0) {
+        this.drawer.drawCharts(this.chartsData);
+      } else {
+        this.clearCanvas();
+      }
     }
 
     return (
