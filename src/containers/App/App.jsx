@@ -65,7 +65,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    chartsData: state.ChartReducer,
+    chartsData: state.ChartReducer.toJS(),
   };
 }
 

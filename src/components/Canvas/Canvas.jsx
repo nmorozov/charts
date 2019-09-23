@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 
 import { array, oneOfType, number, func } from 'prop-types';
 import chartDataType from '../../types/chartDataType';
@@ -108,7 +107,7 @@ class Canvas extends React.Component {
 
   render() {
     const { chartsData } = this.props;
-    this.chartsData = _.cloneDeep(chartsData);
+    this.chartsData = chartsData;
 
     if (this.drawer) {
       if (this.chartsData.length > 0) {
