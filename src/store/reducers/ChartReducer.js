@@ -19,6 +19,7 @@ const ChartReducer = (state = initialState, action) => {
     case MOVE_CHART:
       newState = [...state];
       newState[payload.canvasIndex][payload.chartIndex] = payload.chartData;
+
       break;
     case REMOVE_CHARTS:
       newState = [[], []];

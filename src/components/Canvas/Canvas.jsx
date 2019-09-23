@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 
-import { arrayOf, array, oneOfType, number, func } from 'prop-types';
+import { array, oneOfType, number, func } from 'prop-types';
 import chartDataType from '../../types/chartDataType';
 
 import Drawer from './Drawer';
@@ -132,7 +132,7 @@ Canvas.propTypes = {
   handleMoveChartToAnotherCanvas: func.isRequired,
   handleMoveChart: func.isRequired,
   fromCanvasIndex: number.isRequired,
-  chartsData: oneOfType([arrayOf(chartDataType), array]),
+  chartsData: oneOfType([chartDataType, array]),
 };
 
 Canvas.defaultProps = {
