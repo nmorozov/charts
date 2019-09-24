@@ -10,8 +10,12 @@ const button = ({ handleButtonClick, text }) => (
 );
 
 button.propTypes = {
-  handleButtonClick: PropTypes.func.isRequired,
+  handleButtonClick: PropTypes.func,
   text: PropTypes.string.isRequired,
+};
+
+button.defaultProps = {
+  handleButtonClick: () => {},
 };
 
 export default button;

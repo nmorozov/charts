@@ -17,6 +17,33 @@ import Canvas from '../../components/Canvas';
 import './App.scss';
 
 class App extends React.Component {
+  totalCanvases;
+
+  removeCharts;
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      chartsData: [],
+    };
+  }
+
+  componentDidMount() {
+    const { chartsData, removeCharts } = this.props;
+
+    this.totalCanvases = chartsData.length;
+    this.setState({ chartsData });
+    this.removeCharts = removeCharts;
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return {
+      ...prevState,
+      ...nextProps,
+    };
+  }
+
   handleMoveChartToAnotherCanvas = (fromCanvasIndex, toCanvasIndex, chartIndex) => {
     const { moveChartToAnotherCanvas } = this.props;
     moveChartToAnotherCanvas(fromCanvasIndex, toCanvasIndex, chartIndex);
@@ -38,26 +65,36 @@ class App extends React.Component {
     addNewChart(chartData);
   }
 
+  renderCanvas(chartsData, canvasIndex) {
+    return (
+      <Canvas
+        key={canvasIndex}
+        fromCanvasIndex={canvasIndex}
+        handleMoveChartToAnotherCanvas={this.handleMoveChartToAnotherCanvas}
+        handleMoveChart={this.handleMoveChart}
+        chartsData={chartsData}
+        totalCanvases={this.totalCanvases}
+      />
+    );
+  }
+
+  renderCanvases(chartsData) {
+    if (chartsData.length === 0) {
+      return <div />;
+    }
+
+    return chartsData.map((chartData, canvasIndex) => this.renderCanvas(chartData, canvasIndex));
+  }
+
   render() {
-    const { chartsData, removeCharts } = this.props;
+    const { chartsData } = this.state;
     return (
       <div>
         <Panel>
           <Button handleButtonClick={() => this.handleAddNewChartButtonClick()} text="Add new chart" />
-          <Button handleButtonClick={removeCharts} text="Remove charts" />
+          <Button handleButtonClick={this.removeCharts} text="Remove charts" />
         </Panel>
-        <Canvas
-          fromCanvasIndex={0}
-          handleMoveChartToAnotherCanvas={this.handleMoveChartToAnotherCanvas}
-          handleMoveChart={this.handleMoveChart}
-          chartsData={chartsData[0]}
-        />
-        <Canvas
-          fromCanvasIndex={1}
-          handleMoveChartToAnotherCanvas={this.handleMoveChartToAnotherCanvas}
-          handleMoveChart={this.handleMoveChart}
-          chartsData={chartsData[1]}
-        />
+        {this.renderCanvases(chartsData)}
       </div>
     );
   }

@@ -25,6 +25,17 @@ class Canvas extends React.Component {
     this.drawer = new Drawer(this.canvas);
   }
 
+  componentDidUpdate() {
+    const { chartsData } = this.props;
+    this.chartsData = chartsData;
+
+    if (this.chartsData.length > 0) {
+      this.drawer.drawCharts(this.chartsData);
+    } else {
+      this.clearCanvas();
+    }
+  }
+
   initCanvas() {
     this.ctx = this.canvas.getContext('2d');
     this.initDimensions();
@@ -82,9 +93,13 @@ class Canvas extends React.Component {
     this.canvas.addEventListener('mouseleave', e => {
       if (this.chartsData.length > 0 && this.dragMode && (e.layerX > 0 && e.layerX < this.canvas.width)) {
         let toCanvasIndex;
-        const { handleMoveChartToAnotherCanvas, fromCanvasIndex } = this.props;
+        const { handleMoveChartToAnotherCanvas, fromCanvasIndex, totalCanvases } = this.props;
         this.dragMode = false;
+
         if (e.layerY >= this.canvas.height) {
+          if (fromCanvasIndex === totalCanvases - 1) {
+            return;
+          }
           toCanvasIndex = fromCanvasIndex + 1;
         } else {
           if (fromCanvasIndex === 0) {
@@ -106,17 +121,6 @@ class Canvas extends React.Component {
   }
 
   render() {
-    const { chartsData } = this.props;
-    this.chartsData = chartsData;
-
-    if (this.drawer) {
-      if (this.chartsData.length > 0) {
-        this.drawer.drawCharts(this.chartsData);
-      } else {
-        this.clearCanvas();
-      }
-    }
-
     return (
       <canvas
         ref={canvas => {
@@ -132,10 +136,12 @@ Canvas.propTypes = {
   handleMoveChart: func.isRequired,
   fromCanvasIndex: number.isRequired,
   chartsData: oneOfType([chartDataType, array]),
+  totalCanvases: number,
 };
 
 Canvas.defaultProps = {
   chartsData: [],
+  totalCanvases: 0,
 };
 
 export default Canvas;
