@@ -28,12 +28,8 @@ class Canvas extends React.Component {
   componentDidUpdate() {
     const { chartsData } = this.props;
     this.chartsData = chartsData;
-
-    if (this.chartsData.length > 0) {
-      this.drawer.drawCharts(this.chartsData);
-    } else {
-      this.clearCanvas();
-    }
+    this.clearCanvas();
+    this.drawer.drawCharts(this.chartsData);
   }
 
   initCanvas() {
@@ -48,17 +44,12 @@ class Canvas extends React.Component {
   }
 
   initEventListeners() {
-    this.canvas.addEventListener('mousedown', e => {
+    this.canvas.addEventListener('mousedown', mouseEvent => {
       this.dragMode = true;
       for (let pointGroupIndex = 0; pointGroupIndex < this.chartsData.length; pointGroupIndex += 1) {
         for (let i = 0; i < this.chartsData[pointGroupIndex].coordinates.length; i += 1) {
           const point = this.chartsData[pointGroupIndex].coordinates[i];
-          if (
-            e.clientX >= point.xCoordinate - 5 &&
-            e.clientX <= point.xCoordinate + 5 &&
-            e.layerY >= point.yCoordinate - 5 &&
-            e.layerY <= point.yCoordinate + 5
-          ) {
+          if (this.checkIfMouseInsidePointWithCoordinates(mouseEvent, point)) {
             this.currentChart = pointGroupIndex;
             break;
           }
@@ -92,28 +83,33 @@ class Canvas extends React.Component {
 
     this.canvas.addEventListener('mouseleave', e => {
       if (this.chartsData.length > 0 && this.dragMode && (e.layerX > 0 && e.layerX < this.canvas.width)) {
-        let toCanvasIndex;
-        const { handleMoveChartToAnotherCanvas, fromCanvasIndex, totalCanvases } = this.props;
         this.dragMode = false;
+        const { handleMoveChartToAnotherCanvas, fromCanvasIndex, totalCanvases, handleMoveChart } = this.props;
+        const mouseReachedBottomOfCanvas = e.layerY > this.canvas.height - 5;
+        const toCanvasIndex = mouseReachedBottomOfCanvas ? fromCanvasIndex + 1 : fromCanvasIndex - 1;
 
-        if (e.layerY >= this.canvas.height) {
-          if (fromCanvasIndex === totalCanvases - 1) {
-            return;
-          }
-          toCanvasIndex = fromCanvasIndex + 1;
-        } else {
-          if (fromCanvasIndex === 0) {
-            return;
+        if (toCanvasIndex < 0 || toCanvasIndex > totalCanvases - 1) {
+          if (this.chartWasMoved) {
+            handleMoveChart(this.chartsData[this.currentChart], fromCanvasIndex, this.currentChart);
           }
 
-          toCanvasIndex = fromCanvasIndex - 1;
+          return;
         }
 
         handleMoveChartToAnotherCanvas(fromCanvasIndex, toCanvasIndex, this.currentChart);
-        this.clearCanvas();
         this.drawer.drawCharts(this.chartsData);
+        this.chartWasMoved = false;
       }
     });
+  }
+
+  checkIfMouseInsidePointWithCoordinates(mouseEvent, point) {
+    return (
+      mouseEvent.clientX >= point.xCoordinate - 5 &&
+      mouseEvent.clientX <= point.xCoordinate + 5 &&
+      mouseEvent.layerY >= point.yCoordinate - 5 &&
+      mouseEvent.layerY <= point.yCoordinate + 5
+    );
   }
 
   clearCanvas() {
